@@ -4,6 +4,7 @@
     <button class="button profile" v-on:click="profile1">Profile</button>
     <tinder ref="tinder" :queue.sync="users" @submit="submit">
       <template slot-scope="{ data, index }">
+        <span id="span_id" class="text2">{{ data.uid }}</span>
         <span class="text">{{ data.name }}</span>
         <img :src="data.image" width="400" />
       </template>
@@ -103,13 +104,21 @@ export default {
         return o;
       });
     },
-    Likes() {
-      let data = {
-        key: 111
+    Likes(choice) {
+      let uid = firebase.auth().currentUser.uid;
+      let span_Text = document.getElementById("span_id").innerText;
+      alert(span_Text);
+      let key = {
+        [uid]: choice.key
       };
-      db.collection("keyyy")
+      db.collection("key2")
         .doc("key")
-        .set(data);
+        .set(key);
+      db.collection("users")
+        .doc(uid)
+        .collection("connections")
+        .doc("yeps")
+        .set(key);
     },
     /**
      * 点击按钮所绑定的方法，此方法为调用vue-tinder组件内方法的示例，仅供参考
@@ -132,8 +141,7 @@ export default {
           break;
         case "like":
           alert("Yep" + choice.key);
-          db.collection("key").doc("key");
-          this.Likes(); // 右滑
+          this.Likes(choice); // 右滑
           break;
         case "super":
           alert("Super"); // 上滑
@@ -155,17 +163,6 @@ export default {
     },
     profile1() {
       this.$router.replace("/profile");
-    },
-    profile() {
-      firebase
-        .auth()
-        .signOut()
-        .then(user => {
-          this.$router.replace("/profile");
-        })
-        .catch(err => {
-          alert(err.message);
-        });
     }
   }
 };
@@ -205,7 +202,6 @@ body {
 .like-pointer {
   left: 10px;
 }
-
 .super-pointer {
   position: absolute;
   z-index: 1;
@@ -216,7 +212,6 @@ body {
   width: 112px;
   height: 78px;
 }
-
 .pic {
   width: 100%;
   height: 100%;
@@ -250,6 +245,13 @@ body {
   width: 300px;
 }
 .text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+}
+.text2 {
+  //visibility: hidden;
   position: absolute;
   left: 0;
   right: 0;
