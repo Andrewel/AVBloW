@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button class="button logout" v-on:click="home">Home</button>
     <button class="button logout" v-on:click="logout">Logout</button>
     <article class="covers" v-for="(comic, idx) in comics" :key="idx">
       <div>
@@ -30,14 +31,13 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { db } from "../main";
 
 export default {
   name: "profile",
   data() {
     return {
-      key: 2,
       comics: [],
       name: "",
       image: ""
@@ -52,18 +52,35 @@ export default {
   methods: {
     addComic(name, image) {
       const createdAt = new Date();
-      let key = this.key.key;
-      db.collection("users").add({ name, image, createdAt, key });
+      //let key = this.key.key;
+      let uid = firebase.auth().currentUser.uid;
+      let key = 0;
+      for (var i = 0; i < uid.length; i++) {
+        key = key + uid.charCodeAt(i);
+      }
+      let user = {
+        name: name,
+        image: image,
+        createdAt: createdAt,
+        key: key,
+        uid: uid
+      };
+      /* db.collection("users")
+        .doc(uid)
+        .add({ name, image, createdAt, key });*/
       // Clear values
       this.name = "";
       this.image = "";
       key = key + 1;
-      var data = {
+      let data = {
         key: key
       };
       db.collection("key")
         .doc("key")
         .set(data);
+      db.collection("users")
+        .doc(uid)
+        .set(user);
     },
     deleteComic(id) {
       db.collection("users")
@@ -77,6 +94,9 @@ export default {
         .then(() => {
           this.$router.replace("login");
         });
+    },
+    home() {
+      this.$router.replace("/comics");
     }
   }
 };
@@ -106,6 +126,10 @@ button {
   background-color: #0476f2;
 }
 .logout {
+  left: 50%;
+  top: 100%;
+}
+.home {
   left: 50%;
   top: 100%;
 }

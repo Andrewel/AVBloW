@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { db } from "../main";
 import Tinder from "./Tinder";
 //import Tinder from "./vue-tinder";
@@ -103,6 +103,14 @@ export default {
         return o;
       });
     },
+    Likes() {
+      let data = {
+        key: 111
+      };
+      db.collection("keyyy")
+        .doc("key")
+        .set(data);
+    },
     /**
      * 点击按钮所绑定的方法，此方法为调用vue-tinder组件内方法的示例，仅供参考
      * @method submit
@@ -116,14 +124,19 @@ export default {
      * @method submit
      * @param  {Object} choice {type,key}
      */
+
     submit(choice) {
-      switch (choice) {
-        case "nope": // 左滑
+      switch (choice.type) {
+        case "nope":
+          alert("Nope"); // 左滑
           break;
         case "like":
-          alert("Маловато"); // 右滑
+          alert("Yep" + choice.key);
+          db.collection("key").doc("key");
+          this.Likes(); // 右滑
           break;
-        case "super": // 上滑
+        case "super":
+          alert("Super"); // 上滑
           break;
         default:
           alert("Я таких значений не знаю");
