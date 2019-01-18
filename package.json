@@ -19,7 +19,8 @@
     "vue-router": "^3.0.1",
     "vue-swing": "0.0.9",
     "vue-tinder": "1.0.0",
-    "vuefire": "^2.0.0-alpha.19"
+    "vuefire": "^2.0.0-alpha.19",
+    "vuetify": "1.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -6,9 +6,13 @@ import router from "./router";
 import VueFire from "vuefire";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/storage";
+import Vuetify from "vuetify";
+import "vuetify/dist/vuetify.min.css";
 //import Tinder from "./components/Tinder";
 //import Tinder from "./vue-tinder";
 
+Vue.use(Vuetify);
 Vue.use(VueFire);
 
 let app = "";
@@ -21,6 +25,8 @@ firebase.initializeApp({
   messagingSenderId: "109913145060"
 });
 export const db = firebase.firestore();
+
+export const firestorage = firebase.storage();
 
 Vue.config.productionTip = false;
 

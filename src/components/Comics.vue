@@ -1,7 +1,30 @@
 <template>
   <div id="app" v-cloak>
-    <button class="button logout" v-on:click="logout">Logout</button>
-    <button class="button profile" v-on:click="profile1">Profile</button>
+    <!--
+      <v-btn outline color="indigo" class="button logout" v-on:click="logout"
+        >Logout</v-btn
+      >
+    -->
+    <v-btn
+      fab
+      dark
+      large
+      color="pink"
+      class="button profile"
+      v-on:click="profile"
+    >
+      <v-icon dark>favorite</v-icon>
+    </v-btn>
+    <v-btn
+      outline
+      large
+      fab
+      color="indigo"
+      class="button profile"
+      v-on:click="profile"
+    >
+      <v-icon>edit</v-icon>
+    </v-btn>
     <tinder ref="tinder" :queue.sync="users" @submit="submit">
       <template slot-scope="{ data, index }">
         <span id="span_id" class="text2">{{ data.uid }}</span>
@@ -109,7 +132,8 @@ export default {
       let span_Text = document.getElementById("span_id").innerText;
       alert(span_Text);
       let key = {
-        [uid]: choice.key
+        //[uid]: choice.key,
+        [uid]: true
       };
       db.collection("key2")
         .doc("key")
@@ -161,7 +185,7 @@ export default {
           this.$router.replace("/login");
         });
     },
-    profile1() {
+    profile() {
       this.$router.replace("/profile");
     }
   }
@@ -255,7 +279,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 30px;
+  bottom: 0;
 }
 .logout {
   left: 50%;

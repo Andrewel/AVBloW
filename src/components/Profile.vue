@@ -1,76 +1,135 @@
 <template>
-  <div>
-    <button class="button logout" v-on:click="home">Home</button>
-    <button class="button logout" v-on:click="logout">Logout</button>
-    <article class="covers" v-for="(comic, idx) in comics" :key="idx">
-      <div>
-        <img
-          style="margin: 10px"
-          :src="comic.image"
-          height="291px"
-          width="192px"
+  <v-app>
+    <div>
+      <v-btn outline color="indigo" class="button logout" v-on:click="home"
+        >Home</v-btn
+      >
+      <v-btn outline color="indigo" class="button logout" v-on:click="logout"
+        >Logout</v-btn
+      >
+      <article class="covers" v-for="(comic, idx) in comics" :key="idx">
+        <div>
+          <img
+            style="margin: 10px"
+            :src="comic.image"
+            height="291px"
+            width="192px"
+          />
+          <p>{{ comic.name }}</p>
+          <v-btn
+            dark
+            small
+            color="error"
+            class="button"
+            @click="deleteComic(comic.id);"
+            >Delete</v-btn
+          >
+        </div>
+      </article>
+      <form @submit="addComic(name, downloadURL);">
+        <h2>Add a New Comic Cover</h2>
+        <v-btn
+          class="upload_button"
+          @click.native="selectFile"
+          v-if="!uploadEnd && !uploading"
+        >
+          Upload a cover image
+          <v-icon right aria-hidden="true"> add_a_photo </v-icon>
+        </v-btn>
+        <input
+          id="files"
+          type="file"
+          name="file"
+          ref="uploadInput"
+          accept="image/*"
+          :multiple="false"
+          @change="detectFiles($event);"
         />
-        <p>{{ comic.name }}</p>
-        <hr />
-        <button class="button" @click="deleteComic(comic.id);">Delete</button>
-      </div>
-    </article>
-
-    <form @submit="addComic(name, image);">
-      <h2>Add a New Comic Cover</h2>
-      <input v-model="name" placeholder="Comic Name" class="input" required />
-      <input
-        v-model="image"
-        placeholder="Comic Image URL"
-        class="input"
-        required
-      />
-      <button type="submit" class="button">Add New Comic</button>
-    </form>
-  </div>
+        <v-progress-circular
+          v-if="uploading && !uploadEnd"
+          :size="100"
+          :width="15"
+          :rotate="360"
+          :value="progressUpload"
+          color="primary"
+        >
+          {{ progressUpload }}
+        </v-progress-circular>
+        <!--
+          <img v-if="uploadEnd" :src="downloadURL" width="30%" />
+          <div v-if="uploadEnd">
+            <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
+              Delete
+            </v-btn>
+          </div>
+        -->
+        <input v-model="name" placeholder="Comic Name" class="input" required />
+        <input
+          v-model="downloadURL"
+          placeholder="Comic Image URL"
+          class="input"
+          required
+        />
+        <v-btn small color="primary" type="submit" class="button"
+          >Add New Comic</v-btn
+        >
+      </form>
+    </div>
+  </v-app>
 </template>
 
 <script>
 import firebase from "firebase/app";
+import "firebase/firestore";
+import { firestorage } from "../main";
 import { db } from "../main";
-
 export default {
   name: "profile",
   data() {
     return {
+      progressUpload: 0,
+      fileName: "",
+      uploadTask: "",
+      uploading: false,
+      uploadEnd: false,
+      downloadURL: "",
       comics: [],
       name: "",
-      image: ""
+      image: "",
+      uid: firebase.auth().currentUser.uid
     };
   },
   firestore() {
     return {
-      comics: db.collection("users").orderBy("createdAt"),
+      comics: db
+        .collection("users")
+        .where("uid", "==", this.uid)
+        .orderBy("createdAt"),
       key: db.collection("key").doc("key")
     };
   },
   methods: {
-    addComic(name, image) {
+    addComic(name, downloadURL) {
       const createdAt = new Date();
       //let key = this.key.key;
-      let uid = firebase.auth().currentUser.uid;
+      //let uid = firebase.auth().currentUser.uid;
       let key = 0;
-      for (var i = 0; i < uid.length; i++) {
-        key = key + uid.charCodeAt(i);
+      for (var i = 0; i < this.uid.length; i++) {
+        key = key + this.uid.charCodeAt(i);
       }
       let user = {
         name: name,
-        image: image,
+        image: downloadURL,
         createdAt: createdAt,
         key: key,
-        uid: uid
+        uid: this.uid
       };
       /* db.collection("users")
         .doc(uid)
         .add({ name, image, createdAt, key });*/
       // Clear values
       this.name = "";
-      this.image = "";
+      this.downloadURL = "";
       key = key + 1;
       let data = {
         key: key
@@ -79,7 +138,7 @@ export default {
         .doc("key")
         .set(data);
       db.collection("users")
-        .doc(uid)
+        .doc(this.uid)
         .set(user);
     },
     deleteComic(id) {
@@ -97,6 +156,55 @@ export default {
     },
     home() {
       this.$router.replace("/comics");
+    },
+    selectFile() {
+      this.$refs.uploadInput.click();
+    },
+    detectFiles(e) {
+      let fileList = e.target.files || e.dataTransfer.files;
+      Array.from(Array(fileList.length).keys()).map(x => {
+        this.upload(fileList[x]);
+      });
+    },
+    upload(file) {
+      //this.fileName = file.name;
+      this.fileName = this.uid;
+      this.uploading = true;
+      this.uploadTask = firestorage.ref("images/" + this.uid).put(file);
+      // this.uploadTask = firestorage.ref("images/" + file.name).put(file);
+    },
+    deleteImage() {
+      firestorage
+        .ref("images/" + this.fileName)
+        .delete()
+        .then(() => {
+          this.uploading = false;
+          this.uploadEnd = false;
+          this.downloadURL = "";
+        })
+        .catch(error => {
+          console.error(`file delete error occured: ${error}`);
+        });
+    }
+  },
+  watch: {
+    uploadTask() {
+      this.uploadTask.on(
+        "state_changed",
+        sp => {
+          this.progressUpload = Math.floor(
+            (sp.bytesTransferred / sp.totalBytes) * 100
+          );
+        },
+        null,
+        () => {
+          this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+            this.uploadEnd = true;
+            this.downloadURL = downloadURL;
+            this.$emit("downloadURL", downloadURL);
+          });
+        }
+      );
     }
   }
 };
@@ -123,7 +231,10 @@ button {
   margin-bottom: 10px;
 }
 button {
-  background-color: #0476f2;
+  background-color: black;
+}
+.upload_button {
+  text-align: center;
 }
 .logout {
   left: 50%;
@@ -132,5 +243,12 @@ button {
 .home {
   left: 50%;
   top: 100%;
+}
+.progress-bar {
+  margin: 10px 0;
+}
+input[type="file"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
 }
 </style>
