@@ -18,7 +18,7 @@
       required
     />
     <br />
-    <button v-on:click="login" class="button">Enter</button>
+    <v-btn v-on:click="login" class="button">Enter</v-btn>
     <p>
       or Sign In with Google <br />
       <button @click="socialLogin" class="social-button">

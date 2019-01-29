@@ -7,6 +7,7 @@ import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 import NotFound from "../components/NotFound";
 import Profile from "../components/Profile";
+import Likes from "../components/Likes";
 
 Vue.use(Router);
 
@@ -46,6 +47,14 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: "/likes",
+      name: "Likes",
+      component: Likes,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 });
@@ -57,6 +66,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !currentUser) next("login");
   else if (!requiresAuth && currentUser) next("comics");
   else if (!requiresAuth && currentUser) next("profile");
+  else if (!requiresAuth && currentUser) next("likes");
   else next();
 });
 

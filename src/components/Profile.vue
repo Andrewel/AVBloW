@@ -1,81 +1,86 @@
 <template>
-  <v-app>
-    <div>
-      <v-btn outline color="indigo" class="button logout" v-on:click="home"
-        >Home</v-btn
-      >
-      <v-btn outline color="indigo" class="button logout" v-on:click="logout"
-        >Logout</v-btn
-      >
-      <article class="covers" v-for="(comic, idx) in comics" :key="idx">
-        <div>
+  <div>
+    <v-btn outline color="indigo" class="button home" v-on:click="home"
+      >Home</v-btn
+    >
+    <v-btn outline color="indigo" class="button logout" v-on:click="logout"
+      >Logout</v-btn
+    >
+    <article class="covers" v-for="(comic, idx) in comics" :key="idx">
+      <div>
+        <v-avatar
+          class="avatar"
+          :tile="false"
+          size="200px"
+          color="grey lighten-4"
+        >
           <img
             style="margin: 10px"
             :src="comic.image"
-            height="291px"
-            width="192px"
+            height="300px"
+            width="200px"
           />
-          <p>{{ comic.name }}</p>
-          <v-btn
-            dark
-            small
-            color="error"
-            class="button"
-            @click="deleteComic(comic.id);"
-            >Delete</v-btn
-          >
-        </div>
-      </article>
-      <form @submit="addComic(name, downloadURL);">
-        <h2>Add a New Comic Cover</h2>
+        </v-avatar>
+        <p>{{ comic.name }}</p>
         <v-btn
-          class="upload_button"
-          @click.native="selectFile"
-          v-if="!uploadEnd && !uploading"
+          dark
+          small
+          color="error"
+          class="button"
+          @click="deleteComic(comic.id);"
+          >Delete</v-btn
         >
-          Upload a cover image
-          <v-icon right aria-hidden="true"> add_a_photo </v-icon>
-        </v-btn>
-        <input
-          id="files"
-          type="file"
-          name="file"
-          ref="uploadInput"
-          accept="image/*"
-          :multiple="false"
-          @change="detectFiles($event);"
-        />
-        <v-progress-circular
-          v-if="uploading && !uploadEnd"
-          :size="100"
-          :width="15"
-          :rotate="360"
-          :value="progressUpload"
-          color="primary"
-        >
-          {{ progressUpload }}
-        </v-progress-circular>
-        <!--
-          <img v-if="uploadEnd" :src="downloadURL" width="30%" />
-          <div v-if="uploadEnd">
-            <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
-              Delete
-            </v-btn>
-          </div>
-        -->
-        <input v-model="name" placeholder="Comic Name" class="input" required />
-        <input
-          v-model="downloadURL"
-          placeholder="Comic Image URL"
-          class="input"
-          required
-        />
-        <v-btn small color="primary" type="submit" class="button"
-          >Add New Comic</v-btn
-        >
-      </form>
-    </div>
-  </v-app>
+      </div>
+    </article>
+    <form @submit="addComic(name, downloadURL);">
+      <h2>Update</h2>
+      <v-btn
+        class="upload_button"
+        @click.native="selectFile"
+        v-if="!uploadEnd && !uploading"
+      >
+        Upload a cover image
+        <v-icon right aria-hidden="true"> add_a_photo </v-icon>
+      </v-btn>
+      <input
+        id="files"
+        type="file"
+        name="file"
+        ref="uploadInput"
+        accept="image/*"
+        :multiple="false"
+        @change="detectFiles($event);"
+      />
+      <v-progress-circular
+        v-if="uploading && !uploadEnd"
+        :size="100"
+        :width="15"
+        :rotate="360"
+        :value="progressUpload"
+        color="primary"
+      >
+        {{ progressUpload }}
+      </v-progress-circular>
+      <!--
+        <img v-if="uploadEnd" :src="downloadURL" width="30%" />
+        <div v-if="uploadEnd">
+          <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
+            Delete
+          </v-btn>
+        </div>
+      -->
+      <br />
+      <input
+        v-model="name"
+        type="text"
+        class="input"
+        placeholder="Login"
+        required
+      />
+      <br />
+      <v-btn small type="submit" class="button">Add New Comic</v-btn>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -101,10 +106,7 @@ export default {
   },
   firestore() {
     return {
-      comics: db
-        .collection("users")
-        .where("uid", "==", this.uid)
-        .orderBy("createdAt"),
+      comics: db.collection("users").where("uid", "==", this.uid),
       key: db.collection("key").doc("key")
     };
   },
@@ -233,16 +235,21 @@ button {
 button {
   background-color: black;
 }
+.avatar {
+  margin: 20px;
+}
 .upload_button {
   text-align: center;
 }
 .logout {
-  left: 50%;
-  top: 100%;
+  position: absolute;
+  left: 90%;
+  top: 5%;
 }
 .home {
-  left: 50%;
-  top: 100%;
+  position: absolute;
+  left: 82%;
+  top: 5%;
 }
 .progress-bar {
   margin: 10px 0;
@@ -250,5 +257,11 @@ button {
 input[type="file"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
+}
+input {
+  align-self: center;
+  margin: 10px 0;
+  width: auto;
+  padding: 15px;
 }
 </style>
