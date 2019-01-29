@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <img src="../assets/logo.png" width="100px" />
+    <img src="../assets/google-logo.png" width="100px" />
     <h3>BloTinder</h3>
     <input
       type="text"

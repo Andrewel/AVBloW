@@ -1,6 +1,6 @@
 <template>
   <div class="sign-up">
-    <img src="../assets/logo.png" width="300px" />
+    <img src="../assets/google-logo.png" width="100px" />
     <h3>Create a new account</h3>
     <input
       v-model="login"
