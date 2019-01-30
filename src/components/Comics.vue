@@ -112,9 +112,10 @@
 </template>
 
 <script>
-import firebase from "firebase/app";
-import { db } from "../main";
-import Tinder from "./Tinder";
+/* eslint-disable */
+import firebase from 'firebase/app';
+import { db } from '../main';
+import Tinder from './Tinder';
 export default {
   name: "comics",
   components: {
@@ -562,11 +563,11 @@ body {
   bottom: 30px;
 }
 .text2 {
-  //visibility: hidden;
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 30px;
+  color: white;
 }
 #app .like {
   position: absolute;

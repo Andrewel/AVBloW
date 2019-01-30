@@ -1,8 +1,8 @@
 <template>
-  <div class="sign-up">
-    <img src="../assets/google-logo.png" width="100px" />
-    <h3>Create a new account</h3>
+  <div>
     <v-app>
+    <img src="../assets/google-logo.png" width="100px" class="sign-up" />
+    <h3>Create a new account</h3>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-text-field
           v-model="name"
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import firebase from "firebase";
 export default {
   name: "signup",
@@ -110,6 +111,7 @@ export default {
 
 <style scoped>
 .sign-up {
+  align-self: center;
   margin-top: 40px;
 }
 form {

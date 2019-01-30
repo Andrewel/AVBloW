@@ -48,6 +48,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import TinderCard from "./TinderCard";
 let resizeTimer;
 const initStatus = () => ({

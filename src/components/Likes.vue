@@ -78,6 +78,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import firebase from "firebase/app";
 import { db } from "../main";
 export default {

@@ -84,10 +84,11 @@
 </template>
 
 <script>
-import firebase from "firebase/app";
-import "firebase/firestore";
-import { firestorage } from "../main";
-import { db } from "../main";
+/* eslint-disable */
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import { firestorage } from '../main';
+import { db } from '../main';
 export default {
   name: "profile",
   data() {
@@ -106,8 +107,8 @@ export default {
   },
   firestore() {
     return {
-      comics: db.collection("users").where("uid", "==", this.uid),
-      key: db.collection("key").doc("key")
+      comics: db.collection('users').where('uid', '==', this.uid),
+      key: db.collection('key').doc('key')
     };
   },
   methods: {
@@ -136,15 +137,15 @@ export default {
       let data = {
         key: key
       };
-      db.collection("key")
-        .doc("key")
+      db.collection('key')
+        .doc('key')
         .set(data);
-      db.collection("users")
+      db.collection('users')
         .doc(this.uid)
         .set(user);
     },
     deleteComic(id) {
-      db.collection("users")
+      db.collection('users')
         .doc(id)
         .delete();
     },
@@ -153,11 +154,11 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.replace("login");
+          this.$router.replace('login');
         });
     },
     home() {
-      this.$router.replace("/comics");
+      this.$router.replace('/comics');
     },
     selectFile() {
       this.$refs.uploadInput.click();
@@ -172,12 +173,12 @@ export default {
       //this.fileName = file.name;
       this.fileName = this.uid;
       this.uploading = true;
-      this.uploadTask = firestorage.ref("images/" + this.uid).put(file);
+      this.uploadTask = firestorage.ref('images/' + this.uid).put(file);
       // this.uploadTask = firestorage.ref("images/" + file.name).put(file);
     },
     deleteImage() {
       firestorage
-        .ref("images/" + this.fileName)
+        .ref('images/' + this.fileName)
         .delete()
         .then(() => {
           this.uploading = false;
@@ -192,18 +193,17 @@ export default {
   watch: {
     uploadTask() {
       this.uploadTask.on(
-        "state_changed",
+        'state_changed',
         sp => {
           this.progressUpload = Math.floor(
-            (sp.bytesTransferred / sp.totalBytes) * 100
-          );
+            (sp.bytesTransferred / sp.totalBytes) * 100 );
         },
         null,
         () => {
           this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
             this.uploadEnd = true;
             this.downloadURL = downloadURL;
-            this.$emit("downloadURL", downloadURL);
+            this.$emit('downloadURL', downloadURL);
           });
         }
       );
@@ -211,7 +211,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 h1,
 h2 {

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: "login",
   data() {
@@ -15,7 +16,7 @@ export default {
   },
   methods: {
     notFound() {
-      this.$router.replace("/comics");
+      this.$router.replace('/comics');
     }
   }
 };

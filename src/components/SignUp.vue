@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from 'firebase';
 export default {
   name: "signup",
   data() {
@@ -50,7 +50,7 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          this.$router.replace("/login");
+          this.$router.replace('/login');
         })
         .catch(err => {
           alert(err.message);
