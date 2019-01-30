@@ -4,7 +4,7 @@ import firebase from "firebase";
 
 import Comics from "../components/Comics";
 import Login from "../components/Login";
-import SignUp from "../components/SignUp";
+import SignUp2 from "../components/SignUp2";
 import NotFound from "../components/NotFound";
 import Profile from "../components/Profile";
 import Likes from "../components/Likes";
@@ -25,7 +25,7 @@ let router = new Router({
     {
       path: "/signup",
       name: "SignUp",
-      component: SignUp
+      component: SignUp2
     },
     {
       path: "/comics",
