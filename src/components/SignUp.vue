@@ -3,14 +3,6 @@
     <img src="../assets/google-logo.png" width="100px" />
     <h3>Create a new account</h3>
     <input
-      v-model="login"
-      type="text"
-      class="input"
-      placeholder="Login"
-      required
-    />
-    <br />
-    <input
       v-model="email"
       type="text"
       class="input"
@@ -27,7 +19,7 @@
     />
     <br />
     <v-btn v-on:click="signUp" class="button">Sign Up!</v-btn>
-    <v-btn class="button">
+    <v-btn v-on:click="Login" class="button">
       <router-link to="/login"> Back </router-link>
     </v-btn>
   </div>
@@ -40,6 +32,8 @@ export default {
   data() {
     return {
       login: "",
+      country: "",
+      age: "",
       email: "",
       password: ""
     };
@@ -55,6 +49,9 @@ export default {
         .catch(err => {
           alert(err.message);
         });
+    },
+    Login() {
+      this.$router.replace("/login");
     }
   }
 };
@@ -62,7 +59,7 @@ export default {
 
 <style scoped>
 .sign-up {
-  margin-top: 40px;
+  margin-top: 5%;
 }
 input {
   align-self: center;

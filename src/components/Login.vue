@@ -48,7 +48,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          this.$router.replace("/comics");
+          this.$router.replace("/home");
         })
         .catch(err => {
           alert(err.message);
@@ -60,7 +60,7 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then(result => {
-          this.$router.replace("/comics");
+          this.$router.replace("/home");
         })
         .catch(err => {
           alert("Oops. " + err.message);
@@ -72,7 +72,7 @@ export default {
 
 <style scoped>
 .login {
-  margin-top: 40px;
+  margin-top: 5%;
 }
 input {
   align-self: center;

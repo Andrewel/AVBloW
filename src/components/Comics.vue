@@ -1,75 +1,13 @@
 <template>
   <div id="app" v-cloak>
-    <!--
-      <v-btn outline color="indigo" class="button logout" v-on:click="logout"
-        >Logout</v-btn
-      >
-    -->
-    <!--
-      <v-speed-dial
-        v-model="fab"
-        :top="top"
-        :bottom="bottom"
-        :right="right"
-        :left="left"
-        :direction="direction"
-        :open-on-hover="hover"
-        :transition="transition"
-        class="profile"
-      >
-        <v-btn slot="activator" v-model="fab" color="blue darken-2" dark fab>
-          <v-icon>account_circle</v-icon>
-          <v-icon>close</v-icon>
-        </v-btn>
-        <v-btn fab dark small color="green"> <v-icon>edit</v-icon> </v-btn>
-        <v-btn fab dark small color="indigo"> <v-icon>add</v-icon> </v-btn>
-        <v-btn fab dark small color="red"> <v-icon>delete</v-icon> </v-btn>
-      </v-speed-dial>
-    -->
-    <v-card class="background_photo">
-      <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-        aspect-ratio="2.75"
-      ></v-img>
-
-      <v-card-title primary-title>
-        <div>
-          <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-          <div>
-            Located two hours south of Sydney in the <br />Southern Highlands of
-            New South Wales, ...
-          </div>
-        </div>
-      </v-card-title>
-
-      <v-card-actions>
-        <v-btn flat color="orange">Share</v-btn>
-        <v-btn flat color="orange" @click="decide('default');">Explore</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-badge color="red" overlap class="profile">
-      <span slot="badge">!</span>
-      <v-icon large color="grey"> mail </v-icon>
-    </v-badge>
-    <v-btn fab dark large color="pink" class="like" v-on:click="likes">
-      <v-icon dark>favorite</v-icon>
-    </v-btn>
-    <v-btn
-      outline
-      large
-      fab
-      color="indigo"
-      class="profile"
-      v-on:click="profile"
-    >
-      <v-icon>edit</v-icon>
-    </v-btn>
-    <div></div>
     <tinder ref="tinder" :queue.sync="users2" @submit="submit">
       <template slot-scope="{ data, index }">
         <span id="span_uid" class="text2">{{ data.uid }}</span>
         <span id="span_name" class="text">{{ data.name }}</span>
         <img id="span_image" :src="data.image" />
+        <v-btn fab dark color="indigo" class="btn" @click="decide('default');">
+          <v-icon dark>add</v-icon>
+        </v-btn>
       </template>
 
       <img
@@ -92,22 +30,28 @@
       <img
         src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/nope.png"
         @click="decide('nope');"
-        width="100"
-        height="100"
+        width="70"
       />
       <img
         src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/super-like.png"
         @click="decide('super');"
         width="100"
-        height="100"
       />
       <img
         src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/like.png"
         @click="decide('like');"
-        width="100"
-        height="100"
+        width="70"
       />
     </div>
+
+    <v-flex xs12 sm4 text-xs-center>
+      <v-btn fab dark color="pink" class="like" v-on:click="likes">
+        <v-icon dark>favorite</v-icon>
+      </v-btn>
+      <v-btn outline fab color="indigo" class="profile" v-on:click="profile">
+        <v-icon>edit</v-icon>
+      </v-btn>
+    </v-flex>
   </div>
 </template>
 
@@ -122,6 +66,7 @@ export default {
   },
   data() {
     return {
+      bottomNav: "recent",
       matches: [],
       User: [],
       users3: [],
@@ -219,9 +164,11 @@ export default {
       const list = [];
       for (let i = 0; i < 1; i++) {
         list.push({
-          name: "GGWP",
+          name: "Swipe to Update!",
           key: 123,
-          uid: 222
+          uid: 228,
+          image:
+            "https://www.topgear.com/sites/default/files/styles/16x9_1280w/public/images/news-article/2016/07/1c45e1154fff37d6cef55f222f932ebc/2016-tesla-model-r-front1.jpg.jpg?itok=cYESH9EB"
         });
       }
       // this.locations = this.locations.concat(list);
@@ -260,7 +207,6 @@ export default {
       //let span_uid = document.getElementById("span_uid").value // innerHTML;
       let span_name = document.getElementById("span_name").innerText;
       let span_image = document.getElementById("span_image").src;
-      alert(span_uid);
       let key = {
         key: choice.key,
         name: span_name,
@@ -302,13 +248,16 @@ export default {
         // console.log(key, value.uid);
       }
       for (const [key, value] of Object.entries(this.matches)) {
-        //console.log(key, value.uid);
         if (value.uid === span_uid) {
           db.collection("users")
             .doc(this.uid)
             .collection("Matches")
             .doc(span_uid)
             .set({
+              key: choice.key,
+              name: span_name,
+              image: span_image,
+              uid: span_uid,
               match: true,
               [this.uid]: span_uid
             });
@@ -316,10 +265,18 @@ export default {
             .doc(span_uid)
             .collection("Matches")
             .doc(this.uid)
-            .set({
-              match: true,
-              [span_uid]: this.uid
-            });
+            .set(this.User);
+          db.collection("users")
+            .doc(span_uid)
+            .collection("Matches")
+            .doc(this.uid)
+            .set(
+              {
+                match: true,
+                [span_uid]: this.uid
+              },
+              { merge: true }
+            );
         }
       }
       /*
@@ -358,12 +315,12 @@ export default {
       //let span_uid = document.getElementById("span_uid").value // innerHTML;
       let span_name = document.getElementById("span_name").innerText;
       let span_image = document.getElementById("span_image").src;
-      alert(span_uid);
       let key = {
         key: choice.key,
         name: span_name,
         image: span_image,
-        like: false
+        like: false,
+        uid: span_uid
       };
       db.collection("users")
         .doc(this.uid)
@@ -391,6 +348,18 @@ export default {
       //let span_uid = document.getElementById("span_uid").value // innerHTML;
       let span_name = document.getElementById("span_name").innerText;
       let span_image = document.getElementById("span_image").src;
+      let key = {
+        key: choice.key,
+        name: span_name,
+        image: span_image,
+        superlike: true,
+        uid: span_uid
+      };
+      db.collection("users")
+        .doc(this.uid)
+        .collection("MyLikes")
+        .doc(span_uid)
+        .set(key);
       db.collection("users")
         .doc(span_uid)
         .collection("MeLikes")
@@ -402,6 +371,7 @@ export default {
         .doc(this.uid)
         .set(
           {
+            like: true,
             superlike: true
           },
           { merge: true }
@@ -422,27 +392,32 @@ export default {
      */
 
     submit(choice) {
-      switch (choice.type) {
-        case "nope":
-          //alert("Nope");
-          this.DisLikes(choice); // 左滑
-          break;
-        case "like":
-          // alert("Yep" + choice.key);
-          this.Likes(choice); // 右滑
+      let span_uid = document.getElementById("span_uid").innerText;
+      if (span_uid != 228) {
+        switch (choice.type) {
+          case "nope":
+            //alert("Nope");
+            this.DisLikes(choice); // 左滑
+            break;
+          case "like":
+            // alert("Yep" + choice.key);
+            this.Likes(choice); // 右滑
+            //this.Compare();
+            break;
+          case "super":
+            //  alert("Super");
+            this.SuperLikes(choice); // 上滑
+            break;
+          default:
+            // alert("Error");
+            this.Compare();
+        }
+        if (this.users2.length < 0) {
+          this.getData();
           //this.Compare();
-          break;
-        case "super":
-          //  alert("Super");
-          this.SuperLikes(choice); // 上滑
-          break;
-        default:
-          // alert("Error");
-          this.Compare();
-      }
-      if (this.users2.length < 0) {
-        this.getData();
-        //this.Compare();
+        }
+      } else {
+        this.Compare();
       }
     },
     logout() {
@@ -470,11 +445,10 @@ html,
 body {
   height: 100%;
 }
-
 body {
   margin: 0;
   background-image: linear-gradient(rgba(252, 252, 253, 0.5), #f7f7fb);
-  overflow: hidden;
+  overflow: auto;
 }
 
 #app .vue-tinder {
@@ -482,7 +456,7 @@ body {
   z-index: 1;
   left: 0;
   right: 0;
-  top: 23px;
+  top: 2%;
   margin: auto;
   width: calc(100% - 20px);
   height: calc(100% - 23px - 18%);
@@ -534,7 +508,7 @@ body {
   right: 0;
   bottom: 0;
   margin: auto;
-  height: 15%;
+  height: 25%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -559,23 +533,28 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 30px;
+  bottom: 10%;
 }
 .text2 {
-  //visibility: hidden;
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  color: white;
+}
+.btn {
+  align-items: center;
+  top: 50%;
+  display: none;
 }
 #app .like {
   position: absolute;
-  left: 82%;
-  top: 5%;
+  left: 0;
+  bottom: 0;
 }
 #app .profile {
   position: absolute;
-  left: 90%;
-  top: 5%;
+  right: 0;
+  bottom: 0;
 }
 </style>

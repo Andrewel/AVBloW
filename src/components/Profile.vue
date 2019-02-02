@@ -1,86 +1,83 @@
 <template>
-  <div>
-    <v-btn outline color="indigo" class="button home" v-on:click="home"
-      >Home</v-btn
-    >
-    <v-btn outline color="indigo" class="button logout" v-on:click="logout"
-      >Logout</v-btn
-    >
-    <article class="covers" v-for="(comic, idx) in comics" :key="idx">
-      <div>
+  <v-layout align-center justify-space-around wrap>
+    <v-flex xs12 sm6 md4>
+      <article class="covers" v-for="(comic, idx) in comics" :key="idx">
         <v-avatar
           class="avatar"
           :tile="false"
           size="200px"
           color="grey lighten-4"
         >
-          <img
-            style="margin: 10px"
-            :src="comic.image"
-            height="300px"
-            width="200px"
-          />
+          <img :src="comic.image" alt="avatar" />
         </v-avatar>
         <p>{{ comic.name }}</p>
+        <!--
+          <v-btn
+            dark
+            small
+            color="error"
+            class="button"
+            @click="deleteComic(comic.id);"
+            >Delete</v-btn
+          >
+        -->
+      </article>
+      <form @submit="addComic(name, downloadURL);">
+        <!-- <h2>Update</h2> -->
         <v-btn
-          dark
-          small
-          color="error"
-          class="button"
-          @click="deleteComic(comic.id);"
-          >Delete</v-btn
+          class="upload_button"
+          @click.native="selectFile"
+          v-if="!uploadEnd && !uploading"
         >
-      </div>
-    </article>
-    <form @submit="addComic(name, downloadURL);">
-      <h2>Update</h2>
-      <v-btn
-        class="upload_button"
-        @click.native="selectFile"
-        v-if="!uploadEnd && !uploading"
-      >
-        Upload a cover image
-        <v-icon right aria-hidden="true"> add_a_photo </v-icon>
-      </v-btn>
-      <input
-        id="files"
-        type="file"
-        name="file"
-        ref="uploadInput"
-        accept="image/*"
-        :multiple="false"
-        @change="detectFiles($event);"
-      />
-      <v-progress-circular
-        v-if="uploading && !uploadEnd"
-        :size="100"
-        :width="15"
-        :rotate="360"
-        :value="progressUpload"
-        color="primary"
-      >
-        {{ progressUpload }}
-      </v-progress-circular>
-      <!--
-        <img v-if="uploadEnd" :src="downloadURL" width="30%" />
-        <div v-if="uploadEnd">
-          <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
-            Delete
-          </v-btn>
-        </div>
-      -->
-      <br />
-      <input
-        v-model="name"
-        type="text"
-        class="input"
-        placeholder="Login"
-        required
-      />
-      <br />
-      <v-btn small type="submit" class="button">Add New Comic</v-btn>
-    </form>
-  </div>
+          Upload a cover image
+          <v-icon right aria-hidden="true"> add_a_photo </v-icon>
+        </v-btn>
+        <input
+          id="files"
+          type="file"
+          name="file"
+          ref="uploadInput"
+          accept="image/*"
+          :multiple="false"
+          @change="detectFiles($event);"
+        />
+        <v-progress-circular
+          v-if="uploading && !uploadEnd"
+          :size="100"
+          :width="15"
+          :rotate="360"
+          :value="progressUpload"
+          color="primary"
+        >
+          {{ progressUpload }}
+        </v-progress-circular>
+        <!--
+          <img v-if="uploadEnd" :src="downloadURL" width="30%" />
+          <div v-if="uploadEnd">
+            <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
+              Delete
+            </v-btn>
+          </div>
+        -->
+        <br />
+        <input
+          v-model="name"
+          type="text"
+          class="input"
+          placeholder="Login"
+          required
+        />
+        <br />
+        <v-btn small type="submit" class="button">Update profile</v-btn>
+        <v-btn outline color="indigo" class="button home" v-on:click="home"
+          >Home</v-btn
+        >
+        <v-btn outline color="indigo" class="button logout" v-on:click="logout"
+          >Logout</v-btn
+        >
+      </form>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -106,8 +103,7 @@ export default {
   },
   firestore() {
     return {
-      comics: db.collection("users").where("uid", "==", this.uid),
-      key: db.collection("key").doc("key")
+      comics: db.collection("users").where("uid", "==", this.uid)
     };
   },
   methods: {
@@ -126,13 +122,9 @@ export default {
         key: key,
         uid: this.uid
       };
-      /* db.collection("users")
-        .doc(uid)
-        .add({ name, image, createdAt, key });*/
-      // Clear values
       this.name = "";
       this.downloadURL = "";
-      key = key + 1;
+      //key = key + 1;
       let data = {
         key: key
       };
@@ -142,6 +134,21 @@ export default {
       db.collection("users")
         .doc(this.uid)
         .set(user);
+      db.collection("users")
+        .doc(this.uid)
+        .collection("MyLikes")
+        .doc(this.uid)
+        .set(user);
+      db.collection("users")
+        .doc(this.uid)
+        .collection("MyLikes")
+        .doc(this.uid)
+        .set(
+          {
+            like: false
+          },
+          { merge: true }
+        );
     },
     deleteComic(id) {
       db.collection("users")
@@ -153,11 +160,11 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.replace("login");
+          this.$router.replace("/login");
         });
     },
     home() {
-      this.$router.replace("/comics");
+      this.$router.replace("/home");
     },
     selectFile() {
       this.$refs.uploadInput.click();
@@ -230,26 +237,26 @@ a {
 }
 input,
 button {
-  margin-bottom: 10px;
+  margin-bottom: 2%;
 }
 button {
   background-color: black;
 }
 .avatar {
-  margin: 20px;
+  margin: 5%;
 }
 .upload_button {
   text-align: center;
 }
 .logout {
   position: absolute;
-  left: 90%;
-  top: 5%;
+  left: 0;
+  bottom: 0;
 }
 .home {
   position: absolute;
-  left: 82%;
-  top: 5%;
+  right: 0;
+  bottom: 0;
 }
 .progress-bar {
   margin: 10px 0;
@@ -260,8 +267,8 @@ input[type="file"] {
 }
 input {
   align-self: center;
-  margin: 10px 0;
+  margin: 2% 0;
   width: auto;
-  padding: 15px;
+  padding: 3%;
 }
 </style>

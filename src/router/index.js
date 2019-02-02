@@ -28,7 +28,7 @@ let router = new Router({
       component: SignUp
     },
     {
-      path: "/comics",
+      path: "/home",
       name: "Comics",
       component: Comics,
       meta: {
@@ -57,6 +57,9 @@ let router = new Router({
       }
     }
   ]
+  /* scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  }*/
 });
 
 router.beforeEach((to, from, next) => {
@@ -64,7 +67,7 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
   if (requiresAuth && !currentUser) next("login");
-  else if (!requiresAuth && currentUser) next("comics");
+  else if (!requiresAuth && currentUser) next("home");
   else if (!requiresAuth && currentUser) next("profile");
   else if (!requiresAuth && currentUser) next("likes");
   else next();
