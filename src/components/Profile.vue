@@ -1,83 +1,94 @@
 <template>
-  <v-layout align-center justify-space-around wrap>
-    <v-flex xs12 sm6 md4>
-      <article class="covers" v-for="(comic, idx) in comics" :key="idx">
-        <v-avatar
-          class="avatar"
-          :tile="false"
-          size="200px"
-          color="grey lighten-4"
-        >
-          <img :src="comic.image" alt="avatar" />
-        </v-avatar>
-        <p>{{ comic.name }}</p>
-        <!--
-          <v-btn
-            dark
-            small
-            color="error"
-            class="button"
-            @click="deleteComic(comic.id);"
-            >Delete</v-btn
-          >
-        -->
-      </article>
-      <form @submit="addComic(name, downloadURL);">
-        <!-- <h2>Update</h2> -->
+  <v-card flat tile>
+    <v-toolbar color="cyan" dark>
+      <v-toolbar-side-icon></v-toolbar-side-icon>
+
+      <v-toolbar-title>Profile</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon v-on:click="home"> <v-icon>home</v-icon> </v-btn>
+      <v-btn icon v-on:click="logout"> <v-icon>logout</v-icon> </v-btn>
+    </v-toolbar>
+    <article class="covers" v-for="(comic, idx) in comics" :key="idx">
+      <v-avatar
+        class="avatar"
+        :tile="false"
+        size="200px"
+        color="grey lighten-4"
+      >
+        <img :src="comic.image" alt="avatar" />
+      </v-avatar>
+      <p>{{ comic.name }}</p>
+      <!--
         <v-btn
-          class="upload_button"
-          @click.native="selectFile"
-          v-if="!uploadEnd && !uploading"
+          dark
+          small
+          color="error"
+          class="button"
+          @click="deleteComic(comic.id);"
+          >Delete</v-btn
         >
-          Upload a cover image
-          <v-icon right aria-hidden="true"> add_a_photo </v-icon>
-        </v-btn>
-        <input
-          id="files"
-          type="file"
-          name="file"
-          ref="uploadInput"
-          accept="image/*"
-          :multiple="false"
-          @change="detectFiles($event);"
-        />
-        <v-progress-circular
-          v-if="uploading && !uploadEnd"
-          :size="100"
-          :width="15"
-          :rotate="360"
-          :value="progressUpload"
-          color="primary"
-        >
-          {{ progressUpload }}
-        </v-progress-circular>
-        <!--
-          <img v-if="uploadEnd" :src="downloadURL" width="30%" />
-          <div v-if="uploadEnd">
-            <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
-              Delete
-            </v-btn>
-          </div>
-        -->
-        <br />
-        <input
-          v-model="name"
-          type="text"
-          class="input"
-          placeholder="Login"
-          required
-        />
-        <br />
-        <v-btn small type="submit" class="button">Update profile</v-btn>
-        <v-btn outline color="indigo" class="button home" v-on:click="home"
-          >Home</v-btn
-        >
-        <v-btn outline color="indigo" class="button logout" v-on:click="logout"
-          >Logout</v-btn
-        >
-      </form>
-    </v-flex>
-  </v-layout>
+      -->
+    </article>
+    <form @submit="addComic(name, downloadURL);">
+      <v-btn
+        class="upload_button"
+        @click.native="selectFile"
+        v-if="!uploadEnd && !uploading"
+      >
+        Upload a cover image
+        <v-icon right aria-hidden="true"> add_a_photo </v-icon>
+      </v-btn>
+      <input
+        id="files"
+        type="file"
+        name="file"
+        ref="uploadInput"
+        accept="image/*"
+        :multiple="false"
+        @change="detectFiles($event);"
+      />
+      <v-progress-circular
+        v-if="uploading && !uploadEnd"
+        :size="100"
+        :width="15"
+        :rotate="360"
+        :value="progressUpload"
+        color="primary"
+      >
+        {{ progressUpload }}
+      </v-progress-circular>
+      <!--
+        <img v-if="uploadEnd" :src="downloadURL" width="30%" />
+        <div v-if="uploadEnd">
+          <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
+            Delete
+          </v-btn>
+        </div>
+      -->
+      <br />
+      <input
+        v-model="name"
+        type="text"
+        class="input"
+        placeholder="Login"
+        required
+      />
+      <br />
+      <v-btn small type="submit" class="button">Update profile</v-btn>
+    </form>
+    <v-snackbar
+      v-model="snackbar"
+      color="success"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :vertical="mode === 'vertical'"
+    >
+      {{ text }}
+      <v-btn dark flat @click="snackbar = false;"> Close </v-btn>
+    </v-snackbar>
+  </v-card>
 </template>
 
 <script>
@@ -89,6 +100,10 @@ export default {
   name: "profile",
   data() {
     return {
+      snackbar: false,
+      mode: "",
+      timeout: 5000,
+      text: "Success",
       progressUpload: 0,
       fileName: "",
       uploadTask: "",
@@ -211,6 +226,7 @@ export default {
             this.uploadEnd = true;
             this.downloadURL = downloadURL;
             this.$emit("downloadURL", downloadURL);
+            this.snackbar = true;
           });
         }
       );
@@ -220,28 +236,6 @@ export default {
 </script>
 
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: black;
-}
-input,
-button {
-  margin-bottom: 2%;
-}
-button {
-  background-color: black;
-}
 .avatar {
   margin: 5%;
 }
@@ -250,13 +244,13 @@ button {
 }
 .logout {
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 1%;
+  bottom: 1%;
 }
 .home {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 1%;
+  bottom: 1%;
 }
 .progress-bar {
   margin: 10px 0;
