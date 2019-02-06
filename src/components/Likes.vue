@@ -15,7 +15,7 @@
         </div>
       </article>
     -->
-    <v-toolbar color="cyan" dark>
+    <v-toolbar color="pink" dark>
       <v-toolbar-side-icon></v-toolbar-side-icon>
 
       <v-toolbar-title>Application</v-toolbar-title>
@@ -23,6 +23,7 @@
       <v-spacer></v-spacer>
 
       <v-btn icon> <v-icon>search</v-icon> </v-btn>
+      <v-btn icon v-on:click="home"> <v-icon>arrow_back_ios</v-icon> </v-btn>
     </v-toolbar>
 
     <v-container
@@ -58,6 +59,10 @@
             </v-img>
 
             <v-card-actions class="white justify-center">
+              <span
+                class="headline black--text pl-0 pt-0"
+                v-text="user.name"
+              ></span>
               <v-btn
                 v-for="(social, i) in socials"
                 :key="i"
@@ -93,6 +98,8 @@
                 fab
                 icon
                 small
+                :href="MeLike.linkedln"
+                target="_blank"
               >
                 <v-icon>{{ social.icon }}</v-icon>
               </v-btn>
@@ -114,7 +121,11 @@
               ></span>
             </v-img>
 
-            <v-card-actions class="white justify-center">
+            <v-card-actions class="white">
+              <span
+                class="headline black--text pl-0 pt-0"
+                v-text="match.name"
+              ></span>
               <v-btn
                 v-for="(social, i) in socials"
                 :key="i"
@@ -182,6 +193,9 @@ export default {
     };
   },
   methods: {
+    home() {
+      this.$router.replace("/home");
+    },
     getImage() {
       const min = 550;
       const max = 560;

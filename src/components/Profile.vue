@@ -1,7 +1,46 @@
 <template>
-  <v-card flat tile>
-    <v-toolbar color="cyan" dark>
-      <v-toolbar-side-icon></v-toolbar-side-icon>
+  <v-app>
+    <v-navigation-drawer fixed v-model="drawer" app dark>
+      <v-toolbar
+        flat
+        class="transparent"
+        v-for="(User, idx) in Users"
+        :key="idx"
+      >
+        <v-list class="pa-6">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img :src="User.image" alt="avatar" />
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ User.name }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <v-list dense>
+        <v-divider></v-divider>
+        <v-list-tile @click="">
+          <v-list-tile-action> <v-icon>home</v-icon> </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Contact</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar color="pink" dark>
+      <v-toolbar-side-icon
+        @click.stop="drawer = !drawer;"
+      ></v-toolbar-side-icon>
 
       <v-toolbar-title>Profile</v-toolbar-title>
 
@@ -10,28 +49,18 @@
       <v-btn icon v-on:click="home"> <v-icon>home</v-icon> </v-btn>
       <v-btn icon v-on:click="logout"> <v-icon>logout</v-icon> </v-btn>
     </v-toolbar>
-    <article class="covers" v-for="(comic, idx) in comics" :key="idx">
+    <article v-for="(User, idx) in Users" :key="idx">
       <v-avatar
         class="avatar"
         :tile="false"
         size="200px"
         color="grey lighten-4"
       >
-        <img :src="comic.image" alt="avatar" />
+        <img :src="User.image" alt="avatar" />
       </v-avatar>
-      <p>{{ comic.name }}</p>
-      <!--
-        <v-btn
-          dark
-          small
-          color="error"
-          class="button"
-          @click="deleteComic(comic.id);"
-          >Delete</v-btn
-        >
-      -->
+      <p>{{ User.name }}</p>
     </article>
-    <form @submit="addComic(name, downloadURL);">
+    <form @submit="addComic(name, age, country, downloadURL);">
       <v-btn
         class="upload_button"
         @click.native="selectFile"
@@ -59,20 +88,28 @@
       >
         {{ progressUpload }}
       </v-progress-circular>
-      <!--
-        <img v-if="uploadEnd" :src="downloadURL" width="30%" />
-        <div v-if="uploadEnd">
-          <v-btn class="ma-0" dark small color="error" @click="deleteImage();">
-            Delete
-          </v-btn>
-        </div>
-      -->
       <br />
       <input
         v-model="name"
         type="text"
         class="input"
-        placeholder="Login"
+        placeholder="Name"
+        required
+      />
+      <br />
+      <input
+        v-model="age"
+        type="text"
+        class="input"
+        placeholder="Age"
+        required
+      />
+      <br />
+      <input
+        v-model="country"
+        type="text"
+        class="input"
+        placeholder="Country"
         required
       />
       <br />
@@ -88,7 +125,7 @@
       {{ text }}
       <v-btn dark flat @click="snackbar = false;"> Close </v-btn>
     </v-snackbar>
-  </v-card>
+  </v-app>
 </template>
 
 <script>
@@ -100,6 +137,7 @@ export default {
   name: "profile",
   data() {
     return {
+      drawer: null,
       snackbar: false,
       mode: "",
       timeout: 5000,
@@ -110,19 +148,24 @@ export default {
       uploading: false,
       uploadEnd: false,
       downloadURL: "",
-      comics: [],
+      Users: [],
       name: "",
       image: "",
+      country: "",
+      age: "",
       uid: firebase.auth().currentUser.uid
     };
   },
+  props: {
+    source: String
+  },
   firestore() {
     return {
-      comics: db.collection("users").where("uid", "==", this.uid)
+      Users: db.collection("users").where("uid", "==", this.uid)
     };
   },
   methods: {
-    addComic(name, downloadURL) {
+    addComic(name, age, country, downloadURL) {
       const createdAt = new Date();
       //let key = this.key.key;
       //let uid = firebase.auth().currentUser.uid;
@@ -132,13 +175,17 @@ export default {
       }
       let user = {
         name: name,
+        age: age,
+        country: country,
         image: downloadURL,
         createdAt: createdAt,
         key: key,
         uid: this.uid
       };
       this.name = "";
-      this.downloadURL = "";
+      this.age = "";
+      this.country = "";
+      //this.downloadURL = "";
       //key = key + 1;
       let data = {
         key: key
@@ -242,27 +289,20 @@ export default {
 .upload_button {
   text-align: center;
 }
-.logout {
-  position: absolute;
-  left: 1%;
-  bottom: 1%;
-}
-.home {
-  position: absolute;
-  right: 1%;
-  bottom: 1%;
-}
 .progress-bar {
   margin: 10px 0;
 }
 input[type="file"] {
-  position: absolute;
-  clip: rect(0, 0, 0, 0);
+  display: none;
+  //visibility: hidden;
+  //position: absolute;
+  //left: 10%;
+  //clip: rect(0, 0, 0, 0);
 }
 input {
   align-self: center;
   margin: 2% 0;
   width: auto;
-  padding: 3%;
+  padding: 15px;
 }
 </style>
