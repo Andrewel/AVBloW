@@ -38,7 +38,7 @@
 
       <v-layout row wrap v-if="type == 'My Likes'">
         <v-spacer></v-spacer>
-        <v-flex v-for="user in users" :key="user" xs12 sm6 md4>
+        <v-flex v-for="user in users" :key="user.key" xs12 sm6 md4>
           <v-card>
             <!--
               <v-img
@@ -80,7 +80,7 @@
       </v-layout>
       <v-layout row wrap v-if="type == 'Me Likes'">
         <v-spacer></v-spacer>
-        <v-flex v-for="MeLike in MeLikes" :key="MeLike" xs12 sm6 md4>
+        <v-flex v-for="MeLike in MeLikes" :key="MeLike.key" xs12 sm6 md4>
           <v-card>
             <v-img :src="MeLike.image" height="200px">
               <span
@@ -112,7 +112,7 @@
       </v-layout>
       <v-layout row wrap v-if="type == 'Matches'">
         <v-spacer></v-spacer>
-        <v-flex v-for="match in matches" :key="match" xs12 sm6 md4>
+        <v-flex v-for="match in matches" :key="match.key" xs12 sm6 md4>
           <v-card>
             <v-img :src="match.image" height="200px">
               <span
