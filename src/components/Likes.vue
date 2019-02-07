@@ -89,7 +89,6 @@ export default {
       users: [],
       types: ["Places to Be", "Places to See", "Places to Live"],
       //cards: ["Good", "Best", "Finest"],
-      cards: ["Good", "Best", "Finest"],
       socials: [
         {
           icon: "fab fa-facebook",
