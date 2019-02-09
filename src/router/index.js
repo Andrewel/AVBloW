@@ -8,6 +8,7 @@ import SignUp from "../components/SignUp";
 import NotFound from "../components/NotFound";
 import Profile from "../components/Profile";
 import Likes from "../components/Likes";
+import Chat from "../components/Chat";
 
 Vue.use(Router);
 
@@ -52,6 +53,14 @@ let router = new Router({
       path: "/likes",
       name: "Likes",
       component: Likes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/chat",
+      name: "Chat",
+      component: Chat,
       meta: {
         requiresAuth: true
       }

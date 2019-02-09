@@ -1,6 +1,9 @@
 <template>
   <div class="sign-up">
-    <img src="../assets/google-logo.png" width="100px" />
+    <img
+      src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png"
+      width="100px"
+    />
     <h3>Create a new account</h3>
     <input
       v-model="email"

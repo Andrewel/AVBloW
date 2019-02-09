@@ -88,8 +88,10 @@
                 v-text="MeLike.name"
               ></span>
             </v-img>
-
             <v-card-actions class="white justify-center">
+              <v-btn icon v-on:click="Chat"
+                ><v-icon color="indigo">message</v-icon></v-btn
+              >
               <v-btn
                 v-for="(social, i) in socials"
                 :key="i"
@@ -193,6 +195,9 @@ export default {
     };
   },
   methods: {
+    Chat() {
+      this.$router.replace("/chat");
+    },
     home() {
       this.$router.replace("/home");
     },

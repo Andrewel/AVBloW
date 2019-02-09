@@ -5,9 +5,6 @@
         <span id="span_uid" class="text2">{{ data.uid }}</span>
         <span id="span_name" class="text">{{ data.name }}</span>
         <img id="span_image" :src="data.image" />
-        <v-btn fab dark color="indigo" class="btn" @click="decide('default');">
-          <v-icon dark>add</v-icon>
-        </v-btn>
       </template>
 
       <img
@@ -168,7 +165,7 @@ export default {
           key: 123,
           uid: 228,
           image:
-            "https://www.topgear.com/sites/default/files/styles/16x9_1280w/public/images/news-article/2016/07/1c45e1154fff37d6cef55f222f932ebc/2016-tesla-model-r-front1.jpg.jpg?itok=cYESH9EB"
+            "https://lh3.googleusercontent.com/A1kOKhL2FErp3GjXewczMYeT-FGVgiS0NFo0FQeT1w3eqWfsgV_Mp3PVk4pDSvXbu6kpkteceaJF0mQVt1aDNAbb8OqZybxI26Ek5CHfAqWSH5UsdjxSpkkuwx4JxnoW-MHl-q6B71XTjfmWSfqadBdYmW5FusZelIA1dFoOy0J3OmCRVWgmIGm7gE77RP5gCPw52mRCoB145xJdWIqY90VQ-AaF9vpUgHBy2Cp3HrgxviC30YpAacySUuZr4WmE7FvYIB3m5J3QHFAgOxermRFnkb2w43elDWmFUR6hg_J03DtzHVRcuZ6RVIdqRGsZREML5imNE-x7umo3heAr110Rt7NiFkoB67v7e2i133PBu8qqutMt7O5A3Tjk2Uw0FFWDRNwUl_NXby9_yxYCLQ8xJLL1BPxWB0Y2wgPk6WDM65yp3XcU8DYozAIjU7D32KXizEFEoJPMcSPNURs8Wy5wV-rxPSXRzSoEEcKKSsJghXZRqDnK7CPaAc4Q3Y-Empv6TogthFJeDPJomRN1dRAaxENL3dqsq3pEgu_y4sImxt4aAR-HwamBpsiwm_r-xh_Kq1-Vgt5Pfoo6_rekApVXVo8KYvAu3tV_9oZhYahlMgzFZnGV1TMttjgljPH4r2wsJq_dV0wTtwlKhgs57i5TDepjFbIE=w400-h374-no"
         });
       }
       // this.locations = this.locations.concat(list);
@@ -541,11 +538,6 @@ body {
   right: 0;
   bottom: 0;
   color: white;
-}
-.btn {
-  align-items: center;
-  top: 50%;
-  display: none;
 }
 #app .like {
   position: absolute;
