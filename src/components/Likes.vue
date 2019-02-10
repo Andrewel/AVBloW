@@ -22,8 +22,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon> <v-icon>search</v-icon> </v-btn>
-      <v-btn icon v-on:click="home"> <v-icon>arrow_back_ios</v-icon> </v-btn>
+      <v-btn icon @click="search"> <v-icon>search</v-icon> </v-btn>
+      <v-btn icon @click="home"> <v-icon>arrow_back_ios</v-icon> </v-btn>
     </v-toolbar>
 
     <v-container
@@ -88,10 +88,11 @@
                 v-text="MeLike.name"
               ></span>
             </v-img>
+
             <v-card-actions class="white justify-center">
-              <v-btn icon v-on:click="Chat"
-                ><v-icon color="indigo">message</v-icon></v-btn
-              >
+              <v-btn icon @click="chat">
+                <v-icon color="indigo">message</v-icon>
+              </v-btn>
               <v-btn
                 v-for="(social, i) in socials"
                 :key="i"
@@ -195,8 +196,11 @@ export default {
     };
   },
   methods: {
-    Chat() {
-      this.$router.replace("/chat");
+    chat() {
+      this.$router.replace("/likes2");
+    },
+    search() {
+      this.$router.replace("/likes2");
     },
     home() {
       this.$router.replace("/home");

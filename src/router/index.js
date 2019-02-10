@@ -8,7 +8,7 @@ import SignUp from "../components/SignUp";
 import NotFound from "../components/NotFound";
 import Profile from "../components/Profile";
 import Likes from "../components/Likes";
-import Chat from "../components/Chat";
+import Likes2 from "../components/Likes2";
 
 Vue.use(Router);
 
@@ -58,17 +58,14 @@ let router = new Router({
       }
     },
     {
-      path: "/chat",
-      name: "Chat",
-      component: Chat,
+      path: "/likes2",
+      name: "Likes2",
+      component: Likes2,
       meta: {
         requiresAuth: true
       }
     }
   ]
-  /* scrollBehavior(to, from, savedPosition) {
-    return { x: 0, y: 0 };
-  }*/
 });
 
 router.beforeEach((to, from, next) => {

@@ -4,49 +4,41 @@
 
     <v-expansion-panel popout>
       <v-expansion-panel-content
-        v-for="(message, i) in messages"
+        v-for="(user, i) in users"
         :key="i"
         hide-actions
       >
         <v-layout slot="header" align-center row spacer>
-          <v-flex v-for="user in users" :key="user" xs4 sm2 md1>
+          <v-flex xs4 sm2 md1>
             <v-avatar slot="activator" size="36px">
-              <img v-if="message.avatar" :src="user.image" alt="Avatar" />
-              <v-icon
-                v-else
-                :color="message.color"
-                v-text="message.icon"
-              ></v-icon>
+              <img :src="user.image" alt="Avatar" />
             </v-avatar>
           </v-flex>
-
           <v-flex sm5 md3 hidden-xs-only>
-            <strong v-html="message.name"></strong>
-            <span v-if="message.total" class="grey--text">
-              &nbsp;({{ message.total }})
+            <strong v-html="user.name"></strong>
+            <span v-if="user.key" class="grey--text">
+              &nbsp;({{ user.key }})
             </span>
           </v-flex>
-
           <v-flex no-wrap xs5 sm3>
             <v-chip
-              v-if="message.new"
-              :color="`${message.color} lighten-4`"
+              v-if="user.name"
+              color="indigo lighten-4"
               class="ml-0"
               label
               small
             >
-              {{ message.new }} new
+              {{ user.key }} new
             </v-chip>
-            <strong v-html="message.title"></strong>
+            <strong v-html="user.name"></strong>
           </v-flex>
-
           <v-flex
-            v-if="message.excerpt"
+            v-if="user.name"
             class="grey--text"
             ellipsis
             hidden-sm-and-down
           >
-            &mdash; {{ message.excerpt }}
+            &mdash; {{ user.name }}
           </v-flex>
         </v-layout>
 
@@ -94,24 +86,7 @@ export default {
       lorem:
         "Lorem ipsum dolor sit amet, at aliquam vivendum vel, everti delicatissimi cu eos. Dico iuvaret debitis mel an, et cum zril menandri. Eum in consul legimus accusam. Ea dico abhorreant duo, quo illum minimum incorrupte no, nostro voluptaria sea eu. Suas eligendi ius at, at nemore equidem est. Sed in error hendrerit, in consul constituam cum.",
       uid: firebase.auth().currentUser.uid,
-      users: [],
-      types: ["Places to Be", "Places to See", "Places to Live"],
-      //cards: ["Good", "Best", "Finest"],
-      cards: ["Good", "Best", "Finest"],
-      socials: [
-        {
-          icon: "fab fa-facebook",
-          color: "indigo"
-        },
-        {
-          icon: "fab fa-linkedin",
-          color: "cyan darken-1"
-        },
-        {
-          icon: "fab fa-instagram",
-          color: "red lighten-3"
-        }
-      ]
+      users: []
     };
   },
   firestore() {

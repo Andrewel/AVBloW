@@ -5,6 +5,9 @@
         <span id="span_uid" class="text2">{{ data.uid }}</span>
         <span id="span_name" class="text">{{ data.name }}</span>
         <img id="span_image" :src="data.image" />
+        <v-btn fab dark color="indigo" class="btn" @click="decide('default');">
+          <v-icon dark>add</v-icon>
+        </v-btn>
       </template>
 
       <img
@@ -42,10 +45,10 @@
     </div>
 
     <v-flex xs12 sm4 text-xs-center>
-      <v-btn fab dark color="pink" class="like" v-on:click="likes">
+      <v-btn fab dark color="pink" class="like" @click="likes">
         <v-icon dark>favorite</v-icon>
       </v-btn>
-      <v-btn outline fab color="indigo" class="profile" v-on:click="profile">
+      <v-btn outline fab color="indigo" class="profile" @click="profile">
         <v-icon>edit</v-icon>
       </v-btn>
     </v-flex>
@@ -538,6 +541,11 @@ body {
   right: 0;
   bottom: 0;
   color: white;
+}
+.btn {
+  align-items: center;
+  top: 50%;
+  display: none;
 }
 #app .like {
   position: absolute;

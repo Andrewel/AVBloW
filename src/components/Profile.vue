@@ -46,8 +46,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon v-on:click="home"> <v-icon>home</v-icon> </v-btn>
-      <v-btn icon v-on:click="logout"> <v-icon>logout</v-icon> </v-btn>
+      <v-btn icon @click="home"> <v-icon>home</v-icon> </v-btn>
+      <v-btn icon @click="logout"> <v-icon>logout</v-icon> </v-btn>
     </v-toolbar>
     <article v-for="(User, idx) in Users" :key="idx">
       <v-avatar

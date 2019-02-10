@@ -21,8 +21,8 @@
       required
     />
     <br />
-    <v-btn v-on:click="signUp" class="button">Sign Up!</v-btn>
-    <v-btn v-on:click="Login" class="button">
+    <v-btn @click="signUp" class="button">Sign Up!</v-btn>
+    <v-btn @click="Login" class="button">
       <router-link to="/login"> Back </router-link>
     </v-btn>
   </div>
