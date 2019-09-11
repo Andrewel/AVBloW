@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <img src="../assets/google-logo.png" width="100px" />
-    <h3>BloTinder</h3>
+    <h3>Blonder</h3>
     <input
       type="text"
       v-model="email"
